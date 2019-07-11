@@ -1,0 +1,15 @@
+
+.idea
+/.idea
+
+.externalNativeBuild
+
+gradle
+.gradle
+
+build
+/app/build
+/app/src/main/obj
+/test
+*.iml
+
