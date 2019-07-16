@@ -163,6 +163,7 @@ public class BluetoothChatService {
     }
 
     /**
+     * 开启线程管理连接
      * Start the ConnectedThread to begin managing a Bluetooth connection
      *
      * @param socket The BluetoothSocket on which the connection was made
@@ -295,6 +296,7 @@ public class BluetoothChatService {
     }
 
     /**
+     * 监听进来的的连接
      * This thread runs while listening for incoming connections. It behaves
      * like a server-side client. It runs until a connection is accepted
      * (or until cancelled).
@@ -334,6 +336,7 @@ public class BluetoothChatService {
             // Listen to the server socket if we're not connected
             while (mState != STATE_CONNECTED) {
                 try {
+                    //阻塞
                     // This is a blocking call and will only return on a
                     // successful connection or an exception
                     socket = mmServerSocket.accept();
@@ -381,6 +384,7 @@ public class BluetoothChatService {
 
 
     /**
+     * 连接设备
      * This thread runs while attempting to make an outgoing connection
      * with a device. It runs straight through; the connection either
      * succeeds or fails.
@@ -416,6 +420,7 @@ public class BluetoothChatService {
             Log.i(TAG, "BEGIN mConnectThread SocketType:" + mSocketType);
             setName("ConnectThread" + mSocketType);
 
+            //取消发现，因为会减慢连接
             // Always cancel discovery because it will slow down a connection
             mAdapter.cancelDiscovery();
 
@@ -455,6 +460,8 @@ public class BluetoothChatService {
     }
 
     /**
+     * 当连接到一个设备，该线程处理来去的数据传输
+     * 传输
      * This thread runs during a connection with a remote device.
      * It handles all incoming and outgoing transmissions.
      */
@@ -487,6 +494,7 @@ public class BluetoothChatService {
             byte[] buffer = new byte[1024];
             int bytes;
 
+            //保持监听连接时的输入流
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
                 try {
@@ -505,6 +513,7 @@ public class BluetoothChatService {
         }
 
         /**
+         * 写入连接的输出流
          * Write to the connected OutStream.
          *
          * @param buffer The bytes to write
