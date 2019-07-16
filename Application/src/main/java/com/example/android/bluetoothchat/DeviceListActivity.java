@@ -37,6 +37,7 @@ import com.example.android.common.logger.Log;
 import java.util.Set;
 
 /**
+ * 显示一个对话框，展示已配对的设备和发现得到的设备
  * This Activity appears as a dialog. It lists any paired devices and
  * devices detected in the area after discovery. When a device is chosen
  * by the user, the MAC address of the device is sent back to the parent
