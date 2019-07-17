@@ -27,6 +27,8 @@ import android.os.Message;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +45,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.common.logger.Log;
+
+import java.util.Random;
+import java.util.TimerTask;
 
 /**
  * This fragment controls Bluetooth to communicate with other devices.
@@ -357,6 +362,48 @@ public class BluetoothChatFragment extends Fragment {
                     getActivity().finish();
                 }
         }
+    }
+
+    private Handler handler = new Handler();
+    private String oldName = null;
+    private String btName = "FV_Share";
+    private void setName(String newName)
+    {
+        if(TextUtils.isEmpty(newName))
+        {
+            newName = btName + "_" + new Random(System.currentTimeMillis()).nextInt(1000000);
+            //return;
+        }
+        final String finalName = newName;
+        final long outTimeMs = System.currentTimeMillis() + 10000;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mBluetoothAdapter.isEnabled()) {
+                    if(TextUtils.isEmpty(oldName))
+                    {
+                        oldName = mBluetoothAdapter.getName();
+                    }
+                    mBluetoothAdapter.setName(finalName);
+                    handler.postDelayed(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (finalName.equals(mBluetoothAdapter.getName())) {//直到名字是自己想要设置的名字为止
+                                //mBluetoothAdapter.disable();
+                            }else {
+                                if (System.currentTimeMillis() < outTimeMs) {
+                                    handler.postDelayed(this, 500);
+                                }
+                            }
+                        }
+                    }, 500);
+                } else {
+                    if (System.currentTimeMillis() < outTimeMs) {
+                        handler.postDelayed(this, 500);
+                    }
+                }
+            }
+        }, 500);
     }
 
     /**
