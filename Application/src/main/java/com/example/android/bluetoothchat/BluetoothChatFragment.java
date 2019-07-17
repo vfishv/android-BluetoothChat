@@ -111,6 +111,11 @@ public class BluetoothChatFragment extends Fragment {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             // Otherwise, setup the chat session
+
+            //貌似可以直接打开蓝牙
+            //mBluetoothAdapter.enable(); //TODO 不会立即打开需要等待
+            //setupChat();
+
         } else if (mChatService == null) {
             setupChat();
         }
